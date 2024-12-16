@@ -14,7 +14,7 @@ type Service struct {
 	TempDir string
 }
 
-// InfoConfig MinIO 配置
+// InfoConfig 对象服务 MinIO 配置
 type InfoConfig struct {
 	EndPoint  string
 	AccessKey string

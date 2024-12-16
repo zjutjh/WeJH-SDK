@@ -9,13 +9,14 @@ import (
 	"github.com/zjutjh/WeJH-SDK/redis"
 )
 
+// InfoConfig 微信小程序配置
 type InfoConfig struct {
 	AppId       string
 	AppSecret   string
 	RedisConfig *redis.InfoConfig
 }
 
-// Init 初始化微信小程序
+// Init 使用 Redis 初始化微信小程序
 func Init(config *InfoConfig) *miniprogram.MiniProgram {
 	redisConfig := config.RedisConfig
 

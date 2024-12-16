@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// InfoConfig 会话配置
 type InfoConfig struct {
 	Name        string
 	SecretKey   string
