@@ -2,11 +2,12 @@ package session
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/gin-contrib/sessions"
 	sessionRedis "github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/zjutjh/WeJH-SDK/redis"
-	"strconv"
 )
 
 // InfoConfig 会话配置
