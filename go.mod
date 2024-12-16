@@ -1,6 +1,6 @@
 module github.com/zjutjh/WeJH-SDK
 
-go 1.22.10
+go 1.22.9
 
 require (
 	github.com/gin-contrib/sessions v1.0.1
