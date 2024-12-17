@@ -16,3 +16,13 @@
 ```
 go get github.com/zjutjh/WeJH-SDK
 ```
+
+### 代码规范检查
+
+需要安装 [gci](https://github.com/daixiang0/gci) 和 [golangci-lint](https://golangci-lint.run/)
+
+```
+gofmt -w .
+gci write . -s standard -s default
+golangci-lint run --config .golangci.yml
+```

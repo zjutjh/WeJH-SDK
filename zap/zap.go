@@ -93,7 +93,7 @@ func getFileCore(encoder zapcore.Encoder, cfg *InfoConfig) zapcore.Core {
 		MaxAge:   cfg.LogMaxAge,
 		Compress: cfg.LogCompress,
 	}
-	allLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+	allLevel := zap.LevelEnablerFunc(func(_ zapcore.Level) bool {
 		return true // 记录所有级别
 	})
 	return zapcore.NewCore(encoder, zapcore.AddSync(allWriter), allLevel)
