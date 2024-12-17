@@ -1,4 +1,4 @@
-package log
+package zapHelper
 
 import (
 	"os"
