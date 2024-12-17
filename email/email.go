@@ -1,4 +1,4 @@
-package sdk
+package email
 
 import (
 	"gopkg.in/gomail.v2"
@@ -14,8 +14,8 @@ type MailboxConf struct {
 	RecipientList []string
 }
 
-// MailInfoConfig 发件人配置
-type MailInfoConfig struct {
+// InfoConfig 发件人配置
+type InfoConfig struct {
 	// 发件人账号
 	Sender string
 	// 发件人密码，QQ邮箱这里配置授权码
@@ -33,7 +33,7 @@ type MailInfoConfig struct {
 //	        hello
 //	    </div>
 //	</div>`)
-func (config MailInfoConfig) SendEmail(message string, mailbox MailboxConf) error {
+func (config InfoConfig) SendEmail(message string, mailbox MailboxConf) error {
 	m := gomail.NewMessage()
 	m.SetHeader(`From`, config.Sender)
 	m.SetHeader(`To`, mailbox.RecipientList...)
