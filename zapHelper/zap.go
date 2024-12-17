@@ -44,14 +44,28 @@ const (
 	WriterAll = "all"
 )
 
+// GetDefaultConfig 返回默认的日志配置
+func GetDefaultConfig() *InfoConfig {
+	return &InfoConfig{
+		ConsoleLevel:      "info",
+		DisableStacktrace: false,
+		LogCompress:       false,
+		LogMaxAge:         7,
+		LogMaxSize:        10,
+		LoggerDir:         "./logs",
+		Name:              "default",
+		StacktraceLevel:   "error",
+		Writer:            WriterAll,
+	}
+}
+
 // Init 初始化 Zap 日志记录器
-// 初始化后使用 zap.L() 或 zap.S() 使用全局日志记录器
-func Init(cfg *InfoConfig) error {
+func Init(cfg *InfoConfig) (*zap.Logger, error) {
 	cfg.LoggerDir = strings.TrimRight(cfg.LoggerDir, "/ ") // 去除尾部斜杠和空格
 
 	// 创建日志目录
 	if err := os.MkdirAll(cfg.LoggerDir, 0750); err != nil {
-		return err
+		return nil, err
 	}
 	encoder := createEncoder()
 
@@ -69,11 +83,8 @@ func Init(cfg *InfoConfig) error {
 		})))
 	}
 
-	logger := zap.New(combinedCore, options...) // 创建新的 zap 日志记录器
-	zap.ReplaceGlobals(logger)                  // 替换全局日志记录器
-
-	zap.L().Info("Logger initialized")
-	return nil
+	logger := zap.New(combinedCore, options...) // 创建新的日志记录器
+	return logger, nil
 }
 
 // GetZapLevel 返回日志级别

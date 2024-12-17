@@ -1,4 +1,4 @@
-package wechat
+package wechatHelper
 
 import (
 	"context"
@@ -7,14 +7,14 @@ import (
 	"github.com/silenceper/wechat/v2/cache"
 	"github.com/silenceper/wechat/v2/miniprogram"
 	miniConfig "github.com/silenceper/wechat/v2/miniprogram/config"
-	"github.com/zjutjh/WeJH-SDK/redis"
+	"github.com/zjutjh/WeJH-SDK/redisHelper"
 )
 
 // InfoConfig 微信小程序配置
 type InfoConfig struct {
 	AppId       string
 	AppSecret   string
-	RedisConfig *redis.InfoConfig
+	RedisConfig *redisHelper.InfoConfig
 }
 
 // Init 使用 Redis 初始化微信小程序

@@ -1,4 +1,4 @@
-package session
+package sessionHelper
 
 import (
 	"fmt"
@@ -7,14 +7,14 @@ import (
 	"github.com/gin-contrib/sessions"
 	sessionRedis "github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
-	"github.com/zjutjh/WeJH-SDK/redis"
+	"github.com/zjutjh/WeJH-SDK/redisHelper"
 )
 
 // InfoConfig 会话配置
 type InfoConfig struct {
 	Name        string
 	SecretKey   string
-	RedisConfig *redis.InfoConfig
+	RedisConfig *redisHelper.InfoConfig
 }
 
 // Init 使用 Redis 初始化会话管理
