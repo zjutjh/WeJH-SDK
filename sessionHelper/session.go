@@ -1,4 +1,4 @@
-package session
+package sessionHelper
 
 import (
 	"fmt"
