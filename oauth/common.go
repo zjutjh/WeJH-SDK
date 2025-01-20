@@ -18,6 +18,7 @@ const (
 const (
 	WrongPasswordMsg = "用户名或密码错误" // #nosec G101
 	WrongAccountMsg  = "当前账号无权登录"
+	NotActivatedMsg  = "账号未激活，请激活后再登录"
 )
 
 // UserInfo 用户信息

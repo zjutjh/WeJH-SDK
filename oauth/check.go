@@ -16,7 +16,10 @@ func getLoginMsg(resp *resty.Response) string {
 	if len(matches) == 0 {
 		return ""
 	}
-	return matches[1]
+	// 删除span内部的标签
+	re = regexp.MustCompile(`<[^>]*>`)
+	msg := re.ReplaceAllString(matches[1], "")
+	return msg
 }
 
 // checkLogin 用于判断登陆是否成功
@@ -35,6 +38,8 @@ func checkLogin(resp *resty.Response) error {
 		return oauthException.WrongPassword
 	case WrongAccountMsg:
 		return oauthException.WrongAccount
+	case NotActivatedMsg:
+		return oauthException.NotActivatedError
 	}
 	return oauthException.OtherError
 }
