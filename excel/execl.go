@@ -1,7 +1,9 @@
 package excel
 
 import (
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -127,7 +129,7 @@ func autoAdjustColumnWidth(f *excelize.File, sheetName string, headers []string,
 		}
 		colName, _ := excelize.ColumnNumberToName(colIndex + 1)
 		if err := f.SetColWidth(sheetName, colName, colName, float64(maxWidth+1)); err != nil {
-			fmt.Printf("Failed to set column width for %s: %v\n", colName, err) //nolint
+			log.Printf("Failed to set column width for %s: %v\n", colName, err)
 		}
 	}
 }
@@ -135,7 +137,7 @@ func autoAdjustColumnWidth(f *excelize.File, sheetName string, headers []string,
 // validateFileData 验证文件数据
 func validateFileData(data File) error {
 	if len(data.Sheets) == 0 {
-		return fmt.Errorf("no sheets provided")
+		return errors.New("no sheets provided")
 	}
 	for _, sheet := range data.Sheets {
 		if len(sheet.Headers) == 0 {
