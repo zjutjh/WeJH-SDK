@@ -22,8 +22,14 @@ type Sheet struct {
 	Rows    [][]any  `json:"rows"`    // 行数据（支持不同类型）
 }
 
-// CreateExcelFile 生成 Excel 文件
-func CreateExcelFile(data File, fileName, filePath, host string) (string, error) {
+// CreateExcelFile 生成 Excel 文件并返回文件路径
+func CreateExcelFile(data File, fileName, filePath string) (string, error) {
+	// 如果目录不存在，则创建
+	if err := os.MkdirAll(filePath, 0750); err != nil {
+		return "", err
+	}
+
+	// 验证文件数据
 	if err := validateFileData(data); err != nil {
 		return "", err
 	}
@@ -42,19 +48,11 @@ func CreateExcelFile(data File, fileName, filePath, host string) (string, error)
 
 	// 保存文件
 	fullPath := filepath.Join(filePath, fileName)
-	if err := ensureDirExists(filePath); err != nil {
-		return "", err
-	}
-
-	if err := removeOldFile(fullPath); err != nil {
-		return "", err
-	}
-
 	if err := f.SaveAs(fullPath); err != nil {
 		return "", err
 	}
 
-	return filepath.Join(host, fullPath), nil
+	return fullPath, nil
 }
 
 // createSheet 创建一个工作表，并填充数据
@@ -97,22 +95,6 @@ func writeRows(f *excelize.File, sheetName string, rows [][]any) error {
 		if err := f.SetSheetRow(sheetName, cellRef, &row); err != nil {
 			return err
 		}
-	}
-	return nil
-}
-
-// ensureDirExists 确保目录存在
-func ensureDirExists(filePath string) error {
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		return os.MkdirAll(filePath, 0750)
-	}
-	return nil
-}
-
-// removeOldFile 删除旧文件
-func removeOldFile(fullPath string) error {
-	if _, err := os.Stat(fullPath); err == nil {
-		return os.Remove(fullPath)
 	}
 	return nil
 }
