@@ -12,6 +12,11 @@ import (
 
 // Login 统一登陆
 func Login(username, password string) ([]*http.Cookie, error) {
+	// 0. 检查统一系统是否关闭
+	if err := CheckIsClosed(); err != nil {
+		return nil, err
+	}
+
 	client := resty.New()
 	// 使用cookieJar管理cookie
 	cookieJar, _ := cookiejar.New(nil)
@@ -21,10 +26,6 @@ func Login(username, password string) ([]*http.Cookie, error) {
 	resp, err := client.R().
 		Get(LoginUrl)
 	if err != nil {
-		return nil, err
-	}
-	// 检查统一系统是否关闭
-	if err = checkIsClosed(resp); err != nil {
 		return nil, err
 	}
 
@@ -55,7 +56,7 @@ func Login(username, password string) ([]*http.Cookie, error) {
 		return nil, err
 	}
 	// 检查登陆信息
-	if err = checkLogin(resp); err != nil {
+	if err = CheckLogin(resp); err != nil {
 		return nil, err
 	}
 
