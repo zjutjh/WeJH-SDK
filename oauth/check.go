@@ -1,7 +1,7 @@
 package oauth
 
 import (
-	"bytes"
+	"net/http"
 	"regexp"
 
 	"github.com/PuerkitoBio/goquery"
@@ -9,8 +9,8 @@ import (
 	"github.com/zjutjh/WeJH-SDK/oauth/oauthException"
 )
 
-// getLoginMsg 获取登陆失败后页面上的提示语
-func getLoginMsg(resp *resty.Response) string {
+// GetLoginMsg 获取登陆失败后页面上的提示语
+func GetLoginMsg(resp *resty.Response) string {
 	re := regexp.MustCompile(`<span\s+id="msg">(.+?)</span>`)
 	matches := re.FindStringSubmatch(resp.String())
 	if len(matches) == 0 {
@@ -22,8 +22,8 @@ func getLoginMsg(resp *resty.Response) string {
 	return msg
 }
 
-// checkLogin 用于判断登陆是否成功
-func checkLogin(resp *resty.Response) error {
+// CheckLogin 用于判断登陆是否成功
+func CheckLogin(resp *resty.Response) error {
 	// 判断登陆是否成功
 	destination := resp.RawResponse.Request.URL.String()
 	if destination == PersonalCenterURL {
@@ -32,7 +32,7 @@ func checkLogin(resp *resty.Response) error {
 	}
 
 	// 判断失败原因
-	msg := getLoginMsg(resp)
+	msg := GetLoginMsg(resp)
 	switch msg {
 	case WrongPasswordMsg:
 		return oauthException.WrongPassword
@@ -44,9 +44,14 @@ func checkLogin(resp *resty.Response) error {
 	return oauthException.OtherError
 }
 
-// checkIsClosed 判断统一是否关闭
-func checkIsClosed(resp *resty.Response) error {
-	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(resp.Body()))
+// CheckIsClosed 判断统一是否关闭
+func CheckIsClosed() error {
+	resp, err := http.Get(PersonalCenterURL)
+	if err != nil {
+		return err
+	}
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
 		return err
 	}
