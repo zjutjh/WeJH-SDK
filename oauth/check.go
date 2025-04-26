@@ -25,7 +25,6 @@ func GetLoginMsg(resp *resty.Response) string {
 
 // CheckLogin 用于判断登陆是否成功
 func CheckLogin(resp *resty.Response) error {
-
 	// 判断登陆是否成功
 	destination := resp.RawResponse.Request.URL.String()
 	if destination == PersonalCenterURL {
