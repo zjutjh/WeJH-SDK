@@ -5,6 +5,7 @@ var (
 	WrongAccount      = newError(501, "账号错误")
 	WrongPassword     = newError(502, "密码错误")
 	ClosedError       = newError(503, "统一系统在夜间关闭")
+	EditPasswordError = newError(503, "统一密码需要修改, 请手动登录统一修改")
 	NotActivatedError = newError(504, "账号未激活")
 	OtherError        = newError(599, "其他错误")
 )

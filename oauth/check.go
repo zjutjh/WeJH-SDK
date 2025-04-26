@@ -1,6 +1,7 @@
 package oauth
 
 import (
+	"bytes"
 	"net/http"
 	"regexp"
 
@@ -29,6 +30,16 @@ func CheckLogin(resp *resty.Response) error {
 	if destination == PersonalCenterURL {
 		// 登陆成功后会跳转到用户中心
 		return nil
+	}
+
+	// 判断是否需要修改密码
+	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(resp.Body()))
+	if err != nil {
+		return err
+	}
+	title := doc.Find("title").Text()
+	if title == "修改密码" {
+		return oauthException.EditPasswordError
 	}
 
 	// 判断失败原因
