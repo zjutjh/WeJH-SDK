@@ -62,13 +62,19 @@ func CheckIsClosed() error {
 		return err
 	}
 
+	// 校验httpStatusCode
+	if resp.StatusCode != http.StatusOK {
+		return oauthException.ClosedError
+	}
+
+	// fallback 校验内容
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
 		return err
 	}
 
 	title := doc.Find("title").Text()
-	if title == "Error 403.6" {
+	if title == "Error 403.6" || title == "Error 403" {
 		return oauthException.ClosedError
 	}
 	return nil
