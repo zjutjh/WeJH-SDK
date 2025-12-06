@@ -127,3 +127,13 @@ func (c *Client) GetFileURL(objectKey string, thumbnail bool) string {
 	params.Add("thumbnail", strconv.FormatBool(thumbnail))
 	return fmt.Sprintf("%s/api/file?%s", baseURL, params.Encode())
 }
+
+// GetObjectKeyFromUrl 从 URL 解析出 objectKey
+func (c *Client) GetObjectKeyFromUrl(rawURL string) string {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return ""
+	}
+	queryParams := u.Query()
+	return queryParams.Get("object_key")
+}
