@@ -1,6 +1,7 @@
 package oauth
 
 import (
+	"bytes"
 	"net/http"
 	"regexp"
 
@@ -31,6 +32,16 @@ func CheckLogin(resp *resty.Response) error {
 		return nil
 	}
 
+	// 判断是否需要修改密码
+	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(resp.Body()))
+	if err != nil {
+		return err
+	}
+	title := doc.Find("title").Text()
+	if title == "修改密码" {
+		return oauthException.EditPasswordError
+	}
+
 	// 判断失败原因
 	msg := GetLoginMsg(resp)
 	switch msg {
@@ -51,13 +62,19 @@ func CheckIsClosed() error {
 		return err
 	}
 
+	// 校验httpStatusCode
+	if resp.StatusCode != http.StatusOK {
+		return oauthException.ClosedError
+	}
+
+	// fallback 校验内容
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
 		return err
 	}
 
 	title := doc.Find("title").Text()
-	if title == "Error 403.6" {
+	if title == "Error 403.6" || title == "Error 403" {
 		return oauthException.ClosedError
 	}
 	return nil
