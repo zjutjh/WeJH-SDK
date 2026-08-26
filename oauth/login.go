@@ -29,6 +29,11 @@ func Login(username, password string) ([]*http.Cookie, error) {
 		return nil, err
 	}
 
+	resp, err = client.R().
+		Get(LoginUrl)
+	if err != nil {
+		return nil, err
+	}
 	// 2. 登陆参数生成
 	// 解析execution
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(resp.Body()))
